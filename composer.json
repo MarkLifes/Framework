@@ -19,12 +19,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Kernel\\":"kernel/",
-      "Service\\":"service/",
-      "App\\":"app/",
-      "Network\\":"network/",
-      "App\\Model\\":"models/",
-      "Container\\":"container/"
+      "Itxiao6\\Swoole\\":"src/"
     }
   }
 }

@@ -7,8 +7,240 @@ namespace Itxiao6\Swoole;
  */
 class Command
 {
-    public static function init()
+    /**
+     * 容器
+     * @var null|\Itxiao6\Container\Container
+     */
+    protected $container = null;
+    /**
+     * 框架入口
+     */
+    public static function run()
     {
+        /**
+         * 定义项目根目录
+         */
+        define('ROOT_PATH',__DIR__.'/../../');
+        /**
+         * 自动加载规则
+         */
+        self::autoload();
+        /**
+         * 初始化容器
+         */
+        \Itxiao6\Container\Container::get_Interface();
+        list($command, $options) = self::commandParser();
+        self::showHelp($options);
+    }
 
+    /**
+     * 命令处理程序
+     */
+    protected static function commandHandler()
+    {
+        list($command, $options) = self::commandParser();
+        switch ($command) {
+            case 'start':
+                installCheck();
+                serverStart($options);
+                break;
+            case 'stop':
+                installCheck();
+                serverStop($options);
+                break;
+            case 'reload':
+                self::installCheck();
+                serverReload($options);
+                break;
+            case 'install':
+                serverInstall($options);
+                break;
+            case 'restart':
+                serverRestart($options);
+                break;
+            case 'help':
+            default:
+                showHelp($options);
+        }
+    }
+
+    /**
+     * 解析命令
+     * @return array
+     */
+    protected static function commandParser()
+    {
+        global $argv;
+        $command = '';
+        $options = array();
+        if (isset($argv[1])) {
+            $command = $argv[1];
+        }
+        foreach ($argv as $item) {
+            if (substr($item, 0, 2) === '--') {
+                $temp          = trim($item, "--");
+                $temp          = explode("-", $temp);
+                $key           = array_shift($temp);
+                $options[$key] = array_shift($temp) ?: '';
+            }
+        }
+        return array($command, $options);
+    }
+
+    /**
+     * 清空 opCache 缓存
+     */
+    protected static function opCacheClear()
+    {
+        if (function_exists('apc_clear_cache')) {
+            apc_clear_cache();
+        }
+        if (function_exists('opcache_reset')) {
+            opcache_reset();
+        }
+    }
+
+    /**
+     * 环境检查
+     */
+    protected static function envCheck()
+    {
+        if (version_compare(phpversion(), '7.1', '<')) {
+            die("PHP version\e[31m must >= 7.1\e[0m\n");
+        }
+        if (version_compare(phpversion('swoole'), '1.9.5', '<')) {
+            die("Swoole extension version\e[31m must >= 1.9.5\e[0m\n");
+        }
+        self::installCheck();
+    }
+
+    /**
+     * 检查是否已经安装过了
+     */
+    protected static function installCheck()
+    {
+        $lockFile = ROOT_PATH . '/swoole.lock';
+        if (!is_file($lockFile)) {
+            die("framework has not been installed, Please run\e[031m php Command install\e[0m\n");
+        }
+    }
+
+    /**
+     * 显示帮助字符
+     * @param $options
+     */
+    protected static function showHelp($options)
+    {
+        $opName = '';
+        $args   = array_keys($options);
+        if ($args) $opName = $args[0];
+
+        switch ($opName) {
+            case 'start':
+                echo <<<HELP_START
+\e[33m操作:\e[0m
+\e[31m  Command start\e[0m
+\e[33m简介:\e[0m
+\e[36m  执行本命令可以启动框架 可选的操作参数如下\e[0m
+\e[33m参数:\e[0m
+\e[32m  --d \e[0m                   以守护模式启动框架
+\e[32m  --ip\e[34m-address \e[0m          指定服务监听地址
+\e[32m  --p\e[34m-portNumber \e[0m        指定服务监听端口
+\e[32m  --pid\e[34m-fileName \e[0m        指定服务PID存储文件
+\e[32m  --workerNum\e[34m-num \e[0m       设置worker进程数
+\e[32m  --taskWorkerNum\e[34m-num \e[0m   设置Task进程数
+\e[32m  --user\e[34m-userName \e[0m       指定以某个用户身份执行
+\e[32m  --group\e[34m-groupName \e[0m     指定以某个用户组身份执行
+\e[32m  --cpuAffinity \e[0m         开启CPU亲和\n
+HELP_START;
+                break;
+            case 'stop':
+                echo <<<HELP_STOP
+\e[33m操作:\e[0m
+\e[31m  Command stop\e[0m
+\e[33m简介:\e[0m
+\e[36m  执行本命令可以停止框架 可选的操作参数如下\e[0m
+\e[33m参数:\e[0m
+\e[32m  --f \e[0m             强制停止服务
+\e[32m  --pid\e[34m-pidFile \e[0m   指定服务PID存储文件\n
+HELP_STOP;
+                break;
+            case 'reload':
+                echo <<<HELP_STOP
+\e[33m操作:\e[0m
+\e[31m  Command reload\e[0m
+\e[33m简介:\e[0m
+\e[36m  执行本命令可以重启所有Worker 可选的操作参数如下\e[0m
+\e[33m参数:\e[0m
+\e[32m  --all \e[0m           重启所有进程
+\e[32m  --pid\e[34m-pidFile \e[0m   指定服务PID存储文件\n
+HELP_STOP;
+                break;
+            case 'install':
+                echo <<<HELP_INSTALL
+\e[33m操作:\e[0m
+\e[31m  Command install\e[0m
+\e[33m简介:\e[0m
+\e[36m  安装并初始化 框架 相关目录\e[0m
+\e[33m参数:\e[0m
+\e[32m  本操作没有相关的参数\e[0m\n
+HELP_INSTALL;
+                break;
+            case 'restart':
+                echo <<<HELP_INSTALL
+\e[33m操作:\e[0m
+\e[31m  Command restart\e[0m
+\e[33m简介:\e[0m
+\e[36m  停止并重新启动服务\e[0m
+\e[33m参数:\e[0m
+\e[32m  本操作没有相关的参数\e[0m\n
+HELP_INSTALL;
+                break;
+
+            default:
+                self::showLogo();
+                echo <<<DEFAULTHELP
+\n欢迎使用为API而生的\e[32m swoole\e[0m 框架 当前版本: \e[34m1.x\e[0m
+
+\e[33m使用:\e[0m
+  Command [操作] [选项]
+
+\e[33m操作:\e[0m
+\e[32m  install \e[0m      初始化框架
+\e[32m  start \e[0m        启动服务
+\e[32m  stop \e[0m         停止服务
+\e[32m  reload \e[0m       重载服务
+\e[32m  restart \e[0m      重启服务
+
+\e[32m  help \e[0m         查看命令的帮助信息\n
+\e[31m有关某个操作的详细信息 请使用\e[0m help \e[31m命令查看 \e[0m
+\e[31m如查看\e[0m start \e[31m操作的详细信息 请输入\e[0m php Command help --start\n\n
+DEFAULTHELP;
+        }
+    }
+
+    /**
+     * 显示Logo
+     */
+    protected static function showLogo()
+    {
+        echo <<<LOGO
+
+LOGO;
+    }
+    /**
+     * 自动加载规则
+     */
+    protected static function autoload()
+    {
+        /**
+         * 加载composer 自动加载规则
+         */
+        require_once(ROOT_PATH.'vendor/autoload.php');
     }
 }
+
+/**
+ * 运行框架
+ */
+Command::run();
