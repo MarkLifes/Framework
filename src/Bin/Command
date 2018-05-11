@@ -1,0 +1,14 @@
+<?php
+namespace Itxiao6\Swoole;
+/**
+ * 框架命令Cil模式
+ * Class Command
+ * @package Itxiao6\Swoole
+ */
+class Command
+{
+    public static function init()
+    {
+
+    }
+}
