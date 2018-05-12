@@ -1,6 +1,6 @@
 {
-  "name":"itxiao6/minkernel-swoole",
-  "description":"基于PHP.Wwoole 扩展 的 PHP框架",
+  "name":"itxiao6/swoole",
+  "description":"基于PHP.Swoole 扩展 的 PHP框架",
   "keywords": ["framework"],
   "license": "MIT",
   "require": {
@@ -21,5 +21,9 @@
     "psr-4": {
       "Itxiao6\\Swoole\\":"src/"
     }
+  },
+  "require-dev": {
+    "easyswoole/swoole-ide-helper": "dev-master",
+    "phpunit/phpunit" : "^5.6"
   }
 }
