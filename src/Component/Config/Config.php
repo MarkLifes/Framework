@@ -1,5 +1,5 @@
 <?php
-namespace Itxiao6\Swoole\Component;
+namespace Itxiao6\Swoole\Component\Config;
 /**
  * 配置类
  * Class Config

@@ -3,6 +3,7 @@ namespace Itxiao6\Swoole\Component;
 use Itxiao6\Database\Capsule\Manager;
 use Illuminate\Container\Container;
 use Itxiao6\Swoole\AbstractInterface\Event;
+use Itxiao6\Swoole\Component\Config\Config;
 
 /**
  * 数据库类
