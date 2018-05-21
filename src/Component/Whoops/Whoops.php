@@ -1,9 +1,9 @@
 <?php
-namespace Itxiao6\Swoole\Component\Whoops;
+namespace Itxiao6\Framework\Component\Whoops;
 /**
  * 框架异常处理
  * Class Whoops
- * @package Itxiao6\Swoole\Component\Whoops
+ * @package Itxiao6\Framework\Component\Whoops
  */
 class Whoops
 {

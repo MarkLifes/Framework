@@ -1,9 +1,9 @@
 <?php
-namespace Itxiao6\Swoole\Component;
+namespace Itxiao6\Framework\Component;
 /**
  * 接管异常类
  * Class Hash
- * @package Itxiao6\Swoole\Component
+ * @package Itxiao6\Framework\Component
  */
 class Hash {
     /**

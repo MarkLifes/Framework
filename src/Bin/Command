@@ -1,9 +1,9 @@
 <?php
-namespace Itxiao6\Swoole;
+namespace Itxiao6\Framework;
 /**
  * 框架命令Cil模式
  * Class Command
- * @package Itxiao6\Swoole
+ * @package Itxiao6\Framework
  */
 class Command
 {

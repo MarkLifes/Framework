@@ -2,7 +2,7 @@
 /**
  * 数据库迁移
  */
-use Itxiao6\Swoole\Service\DB;
+use Itxiao6\Framework\Component\Database\DB;
 use Itxiao6\Database\Schema\Blueprint;
 
 /**

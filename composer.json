@@ -1,9 +1,10 @@
 {
-  "name":"itxiao6/swoole",
-  "description":"基于PHP.Swoole 扩展 的 PHP框架",
-  "keywords": ["framework"],
+  "name":"itxiao6/framework",
+  "description":"基于PHP.Swoole 的组件式 框架",
+  "keywords": ["framework","Swoole"],
   "license": "MIT",
   "require": {
+    "php": ">=7.1.0",
     "itxiao6/database":"dev-master",
     "itxiao6/route":"dev-master",
     "itxiao6/container":"dev-master",
@@ -19,7 +20,7 @@
   ],
   "autoload": {
     "psr-4": {
-      "Itxiao6\\Swoole\\":"src/"
+      "Itxiao6\\Framework\\":"src/"
     }
   },
   "require-dev": {

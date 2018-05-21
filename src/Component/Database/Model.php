@@ -1,13 +1,13 @@
 <?php
-namespace Itxiao6\Swoole\Component;
+namespace Itxiao6\Framework\Component;
 use Itxiao6\Database\Eloquent\Model as Eloquent;
 use Itxiao6\Database\Eloquent\SoftDeletes;
-use Itxiao6\Swoole\AbstractInterface\Event;
+use Itxiao6\Framework\AbstractInterface\Event;
 
 /**
  * 模型父类
  * Class Model
- * @package Itxiao6\Swoole\Component
+ * @package Itxiao6\Framework\Component
  */
 class Model extends Eloquent
 {

@@ -1,13 +1,13 @@
 <?php
-namespace Itxiao6\Swoole\AbstractInterface;
+namespace Itxiao6\Framework\AbstractInterface;
 use Itxiao6\Database\Capsule\Manager;
 use Itxiao6\Session\Session;
-use Itxiao6\Swoole\Component\DB;
+use Itxiao6\Framework\Component\DB;
 
 /**
  * 系统事件
- * Class Event
- * @package Kernel
+ * Interface Event
+ * @package Itxiao6\Framework\AbstractInterface
  */
 interface Event
 {

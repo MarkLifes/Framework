@@ -1,13 +1,13 @@
 <?php
-namespace Itxiao6\Swoole\Component;
+namespace Itxiao6\Framework\Component;
 use Itxiao6\Session\Session;
-use Itxiao6\Swoole\Component\Config\Config;
+use Itxiao6\Framework\Component\Config\Config;
 /**
  * 系统默认事件
  * Class Event
- * @package Itxiao6\Swoole\Component
+ * @package Itxiao6\Framework\Component
  */
-class Event implements \Itxiao6\Swoole\AbstractInterface\Event
+class Event implements \Itxiao6\Framework\AbstractInterface\Event
 {
     /**
      * 定义数据库连接状态
