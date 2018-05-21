@@ -48,32 +48,54 @@ class Framework_Kernel
     }
 
     /**
-     * 注册组件
+     * 创造组件
      * @param $name
      * @return mixed
      */
-    function registerComponent($name)
+    function makeComponent($name)
     {
-        return $this -> component[$name]['class']::getInterface(...$this -> component[$name]['param']);
+        return $this -> object[$name] = $this -> component[$name]['class']::getInterface(...$this -> component[$name]['param']);
     }
     /**
      * 使用组件
      */
-    function useComponent()
+    function useComponent($name)
     {
-
+        if(isset($this -> object[$name])){
+            return $this -> object[$this -> object[$name]];
+        }else{
+            return $this -> makeComponent($name);
+        }
     }
 
     /**
      * 清除组件
+     * @param $name
+     * @return bool
      */
-    function clearComponent()
+    function clearComponent($name)
     {
+        if (isset($this -> object[$name])){
+            unset($this -> object[$name]);
+        }
+        return true;
+    }
 
+    /**
+     * 删除组件
+     * @param $name
+     * @return bool
+     */
+    function deleteComponent($name)
+    {
+        if (isset($this -> component[$name])){
+            unset($this -> component[$name]);
+        }
+        return true;
     }
 }
 include_once(__DIR__.'/../vendor/autoload.php');
 /**
  * 使用配置组件
  */
-echo Framework_Kernel::getInterface() -> addComponent('配置',\Itxiao6\Framework\Component\Config\Config::class,[__DIR__.'/../config/']) -> registerComponent('配置') -> get('app','name')."\n";
+echo Framework_Kernel::getInterface() -> addComponent('配置',\Itxiao6\Framework\Component\Config\Config::class,[__DIR__.'/../config/']) -> makeComponent('配置') -> get('app','name')."\n";
